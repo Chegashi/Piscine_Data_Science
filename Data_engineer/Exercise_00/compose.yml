@@ -1,0 +1,65 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: mochegri
+      POSTGRES_DB: piscineds
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./data:/data  # Mount the data directory
+      - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh  # Mount the initialization script
+    entrypoint: ["sh", "/docker-entrypoint-initdb.d/initdb.sh"]
+ 
+  adminer:
+    image: adminer
+    restart: always
+    container_name: adminer
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DEFAULT_USERNAME: mochegri
+      ADMINER_DEFAULT_PASSWORD: mysecretpassword
+
+volumes:
+  pgdata:
+
+
+
+# PGPASSWORD=mysecretpassword psql -U mochegri -d piscineds -h localhost 
+# psql -U mochegri -d piscineds -h localhost 
+
+# version: '3.9'
+
+# services:
+#   postgres:
+#     image: postgres
+#     restart: always
+#     container_name: postgres
+#     ports:
+#       - 5432:5432
+#     environment:
+#       POSTGRES_USER: mochegri
+#       POSTGRES_DB: piscineds
+#       POSTGRES_PASSWORD: mysecretpassword
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+#       - ./data:/data  # Mount the data directory
+#       - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh  # Mount the initialization script
+#     entrypoint: ["sh", "/docker-entrypoint-initdb.d/initdb.sh"]
+
+#   adminer:
+#     image: adminer
+#     restart: always
+#     container_name: adminer
+#     ports:
+#       - 8080:8080
+
+# volumes:
+#   pgdata:
